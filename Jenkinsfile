@@ -13,5 +13,15 @@ node {
     stage('Test') {
         sh 'mvn test'
     }
+  stage('Build Image') {
+         app=docker.build("shikha02/calculator")
+      }
+    stage('Push image')
+      {
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+            app.push("calculator${env.BUILD_NUMBER}")
+            app.push("latest")
+        }
+      }
     
 }
